@@ -1,4 +1,4 @@
-package com.foodia.pruebafoodia.service;
+package com.example.backendprueba.service;
 
 import com.foodia.pruebafoodia.entities.RecipeCategory;
 import com.foodia.pruebafoodia.repository.RecipeCategoryRepository;

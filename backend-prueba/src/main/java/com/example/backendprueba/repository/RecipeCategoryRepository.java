@@ -1,5 +1,6 @@
-package com.foodia.pruebafoodia.repository;
-import com.foodia.pruebafoodia.entities.RecipeCategory;
+package com.example.backendprueba.repository;
+
+import com.example.backendprueba.entities.RecipeCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

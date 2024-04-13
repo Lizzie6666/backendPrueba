@@ -1,6 +1,6 @@
-package com.upc.foodia.entities;
+package com.example.backendprueba.entities;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

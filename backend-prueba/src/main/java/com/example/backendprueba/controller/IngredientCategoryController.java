@@ -1,10 +1,7 @@
-package com.upc.foodia.controller;
-
-import com.upc.foodia.dto.IngredientCategoryDTO;
-import com.upc.foodia.dto.IngredientDTO;
-import com.upc.foodia.entities.Ingredient;
-import com.upc.foodia.entities.IngredientCategory;
-import com.upc.foodia.services.IngredientCategoryService;
+package com.example.backendprueba.controller;
+import com.example.backendprueba.dto.IngredientCategoryDTO;
+import com.example.backendprueba.entities.IngredientCategory;
+import com.example.backendprueba.service.IngredientCategoryService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.List;
 import java.util.stream.Collectors;
 

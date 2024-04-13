@@ -1,8 +1,10 @@
 package com.example.backendprueba.dto;
 
-
+import com.upc.foodia.entities.Ingredient;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Setter
 @Getter

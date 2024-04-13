@@ -1,5 +1,5 @@
-package com.foodia.pruebafoodia.entities;
 
+package com.example.backendprueba.entities;
 import lombok.*;
 
 import javax.persistence.*;

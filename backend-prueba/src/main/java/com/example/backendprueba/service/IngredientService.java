@@ -1,8 +1,9 @@
-package com.upc.foodia.services;
 
-import com.upc.foodia.entities.Ingredient;
-import com.upc.foodia.entities.IngredientCategory;
-import com.upc.foodia.repository.IngredientRepository;
+package com.example.backendprueba.service;
+
+import com.example.backendprueba.entities.Ingredient;
+
+import com.example.backendprueba.repository.IngredientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

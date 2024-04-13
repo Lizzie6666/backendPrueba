@@ -1,8 +1,8 @@
-package com.upc.foodia.controller;
+package com.example.backendprueba.controller;
 
-import com.upc.foodia.dto.IngredientDTO;
-import com.upc.foodia.entities.Ingredient;
-import com.upc.foodia.services.IngredientService;
+import com.example.backendprueba.dto.IngredientDTO;
+import com.example.backendprueba.entities.Ingredient;
+import com.example.backendprueba.service.IngredientService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,6 +1,7 @@
-package com.upc.foodia.repository;
+package com.example.backendprueba.repository;
 
-import com.upc.foodia.entities.IngredientCategory;
+
+import com.example.backendprueba.entities.IngredientCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface IngredientCategoryRepository extends JpaRepository<IngredientCategory,Long> {
