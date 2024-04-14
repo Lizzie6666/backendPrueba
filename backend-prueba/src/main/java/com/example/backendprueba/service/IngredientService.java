@@ -14,7 +14,7 @@ public class IngredientService {
     @Autowired
     private IngredientRepository ingredientRepository;
 
-    public Ingredient save(Ingredient ingredient){
+    public Ingredient register(Ingredient ingredient){
         return ingredientRepository.save(ingredient);
     }
 

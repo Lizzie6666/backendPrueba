@@ -1,11 +1,12 @@
 package com.example.backendprueba.entities;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.Length;
-import org.springframework.boot.autoconfigure.web.WebProperties;
+
 
 @Data
 @NoArgsConstructor
@@ -17,6 +18,11 @@ public class Ingredient {
     private Long id;
     @Column (length=50,nullable = false)
     private String name;
-    private Long calorias;
+    private Long calories;
+
+    @ManyToOne(targetEntity = IngredientCategory.class)
+    @JoinColumn(name = "ingredientCategory_id", referencedColumnName = "id")
+    @JsonBackReference("ingredient_items")
+    private IngredientCategory ingredientCategory;
 
 }

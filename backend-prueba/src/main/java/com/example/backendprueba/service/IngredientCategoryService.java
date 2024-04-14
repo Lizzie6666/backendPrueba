@@ -14,7 +14,7 @@ public class IngredientCategoryService {
     @Autowired
     private IngredientCategoryRepository ingredientCategoryRepository;
 
-    public IngredientCategory saves(IngredientCategory ingredientCategory){
+    public IngredientCategory register(IngredientCategory ingredientCategory){
         return ingredientCategoryRepository.save(ingredientCategory);
     }
 

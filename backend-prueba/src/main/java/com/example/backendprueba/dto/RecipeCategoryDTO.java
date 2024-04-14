@@ -1,4 +1,4 @@
-package com.foodia.pruebafoodia.dto;
+package com.example.backendprueba.dto;
 import lombok.Data;
 @Data
 public class RecipeCategoryDTO {

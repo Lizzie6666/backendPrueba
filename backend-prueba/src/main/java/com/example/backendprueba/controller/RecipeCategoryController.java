@@ -1,9 +1,8 @@
-package com.foodia.pruebafoodia.controller;
+package com.example.backendprueba.controller;
 
-
-import com.foodia.pruebafoodia.dto.RecipeCategoryDTO;
-import com.foodia.pruebafoodia.entities.RecipeCategory;
-import com.foodia.pruebafoodia.service.RecipeCategoryService;
+import com.example.backendprueba.dto.RecipeCategoryDTO;
+import com.example.backendprueba.entities.RecipeCategory;
+import com.example.backendprueba.service.RecipeCategoryService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -22,6 +21,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class RecipeCategoryController {
     Logger logger = LoggerFactory.getLogger(RecipeCategoryController.class);
+
     @Autowired
     private RecipeCategoryService recipeCategoryService;
 

@@ -1,5 +1,6 @@
 package com.example.backendprueba.controller;
 import com.example.backendprueba.dto.IngredientCategoryDTO;
+import com.example.backendprueba.dto.RecipeDTO;
 import com.example.backendprueba.entities.IngredientCategory;
 import com.example.backendprueba.service.IngredientCategoryService;
 import org.modelmapper.ModelMapper;
@@ -32,24 +33,26 @@ public class IngredientCategoryController {
         return new ResponseEntity<List<IngredientCategoryDTO>>(listDto,HttpStatus.OK);
     }
     @PostMapping("/ingredientCategory")
-    public ResponseEntity<IngredientCategoryDTO> saves(@RequestBody IngredientCategoryDTO ingredientCategoryDto){
-        IngredientCategory ingredientCategory=convertToEntity(ingredientCategoryDto);
-        IngredientCategoryDTO ingredientCategoryDTO;
-        try{
-            ingredientCategory=ingredientCategoryService.saves(ingredientCategory);
-            ingredientCategoryDTO=convertToDTO(ingredientCategory);
+    public ResponseEntity<IngredientCategoryDTO>register(@RequestBody IngredientCategoryDTO ingredientCategoryDTO)
+    {
+        IngredientCategory ingredientCategory=convertToEntity(ingredientCategoryDTO);
+        IngredientCategoryDTO ingredientCategoryDTO1;
+        try {
+            ingredientCategory = ingredientCategoryService.register(ingredientCategory);
+            ingredientCategoryDTO1 = convertToDTO(ingredientCategory);
         }catch (Exception e){
             e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Could not register");
+            throw new  ResponseStatusException(HttpStatus.NOT_FOUND, "Could not register");
         }
-        return new ResponseEntity<IngredientCategoryDTO>(ingredientCategoryDTO,HttpStatus.OK);
+        return new ResponseEntity<IngredientCategoryDTO>(ingredientCategoryDTO1, HttpStatus.OK);
     }
 
 
     @PutMapping("/ingredientCategory")
     public ResponseEntity<IngredientCategoryDTO> update(@RequestBody IngredientCategoryDTO ingredientCategoryDto){
+
+        IngredientCategory ingredientCategory=convertToEntity(ingredientCategoryDto);
         IngredientCategoryDTO ingredientCategoryDTO;
-        IngredientCategory ingredientCategory;
         try{
             ingredientCategory=convertToEntity(ingredientCategoryDto);
             logger.debug("Update ingredient");
@@ -77,10 +80,10 @@ public class IngredientCategoryController {
         return null;
     }
 
-    private IngredientCategoryDTO convertToEntity(IngredientCategoryDTO ingredientCategoryDTO){
+    private IngredientCategory convertToEntity(IngredientCategoryDTO ingredientCategoryDTO){
         ModelMapper modelMapper = new ModelMapper();
-        IngredientCategoryDTO i= modelMapper.map(ingredientCategoryDTO, IngredientCategoryDTO.class);
-        return i;
+        IngredientCategory ingredientCategory= modelMapper.map(ingredientCategoryDTO, IngredientCategory.class);
+        return ingredientCategory;
     }
     private IngredientCategoryDTO convertToDTO(IngredientCategory ingredientCategory){
         ModelMapper modelMapper =new ModelMapper();

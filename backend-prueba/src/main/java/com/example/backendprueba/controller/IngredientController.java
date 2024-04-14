@@ -38,7 +38,7 @@ public class IngredientController {
         Ingredient ingredient=convertToEntity(ingredientDto);
         IngredientDTO ingredientDTO;
         try{
-            ingredient = ingredientService.save(ingredient);
+            ingredient = ingredientService.register(ingredient);
             ingredientDTO=convertToDTO(ingredient);
         }catch (Exception e){
             e.printStackTrace();
@@ -86,8 +86,8 @@ public class IngredientController {
     }
     private IngredientDTO convertToDTO(Ingredient ingredient){
         ModelMapper modelMapper =new ModelMapper();
-        IngredientDTO i=modelMapper.map(ingredient,IngredientDTO.class);
-        return i;
+        IngredientDTO ingredientDTO=modelMapper.map(ingredient,IngredientDTO.class);
+        return ingredientDTO;
     }
 
     private List<IngredientDTO> convertToListDTO(List<Ingredient> list){

@@ -1,19 +1,20 @@
 package com.example.backendprueba.service;
 
-import com.foodia.pruebafoodia.entities.RecipeCategory;
-import com.foodia.pruebafoodia.repository.RecipeCategoryRepository;
-import lombok.RequiredArgsConstructor;
+
+import com.example.backendprueba.entities.RecipeCategory;
+import com.example.backendprueba.repository.RecipeCategoryRepository;
+
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
 @Service
-@RequiredArgsConstructor
+
 public class RecipeCategoryService {
-    private final RecipeCategoryRepository recipeCategoryRepository;
+    private  RecipeCategoryRepository recipeCategoryRepository;
 
     @Transactional
-    public RecipeCategory register(RecipeCategory recipeCategory){
+    public  RecipeCategory register(RecipeCategory recipeCategory){
         return recipeCategoryRepository.save(recipeCategory);
     }
     public List<RecipeCategory> listado(){

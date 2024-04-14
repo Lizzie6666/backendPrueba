@@ -1,12 +1,13 @@
 
 package com.example.backendprueba.entities;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import com.example.backendprueba.entities.Recipe;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
-@Getter //manera mas rapida
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -15,8 +16,9 @@ public class RecipeCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "name", length = 60, nullable = false)
+
     private String name;
-  /* @OneToMany(mappedBy = "recipeCategory", cascade = CascadeType.ALL)
-    private Set<Recipe> recipe = new HashSet<>();*/
+   @OneToMany(mappedBy = "recipeCategory", cascade = CascadeType.ALL)
+   @JsonManagedReference("recipeCategory_items")
+    private List<Recipe> recipes ;
 }

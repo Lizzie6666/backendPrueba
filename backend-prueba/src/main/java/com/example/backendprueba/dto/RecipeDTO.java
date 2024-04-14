@@ -1,6 +1,7 @@
 package com.example.backendprueba.dto;
 
-import com.upc.foodia.entities.Ingredient;
+
+import com.example.backendprueba.entities.Ingredient;
 import lombok.Getter;
 import lombok.Setter;
 
