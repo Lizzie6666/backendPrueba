@@ -16,7 +16,7 @@ public class Ingredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column (length=50,nullable = false)
+    @Column(length = 50, nullable = false)
     private String name;
     private Long calories;
 
@@ -25,4 +25,8 @@ public class Ingredient {
     @JsonBackReference("ingredient_items")
     private IngredientCategory ingredientCategory;
 
+    @ManyToOne(targetEntity = Recipe.class)
+    @JoinColumn(name = "recipe_id", referencedColumnName = "id")
+    @JsonBackReference("ingredient_items")
+    private Recipe recipe;
 }

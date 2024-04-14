@@ -11,6 +11,7 @@ import java.util.List;
 public interface RecipeRepository extends JpaRepository<Recipe,Long> {
     public List<Recipe> findRecipeByTitleStartingWith(String prefix);
     public List<Recipe> findRecipesByIngredients(String ingredient);
-    public List<Recipe>findRecipesByNameRecipeCategory(String category);
+    public List<Recipe>findRecipesByRecipeCategory(String category);
     public List<Recipe>findRecipesByType(String type);
+
 }

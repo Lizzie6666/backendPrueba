@@ -1,6 +1,7 @@
 package com.example.backendprueba.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
@@ -30,6 +31,8 @@ public class Recipe {
    //private Long idUser;
 
     @ManyToOne(targetEntity = RecipeCategory.class)
+    @JoinColumn(name = "recipeCategory_id", referencedColumnName = "id")
+    @JsonBackReference("recipe_items")
     private RecipeCategory recipeCategory;
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)

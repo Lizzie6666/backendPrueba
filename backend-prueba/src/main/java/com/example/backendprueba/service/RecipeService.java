@@ -45,7 +45,7 @@ public class RecipeService {
         return recipeRepository.findRecipesByIngredients(ingredient);
     }
     public List<Recipe>filterByRecipeCategory(String category){
-        return recipeRepository.findRecipesByNameRecipeCategory(category);
+        return recipeRepository.findRecipesByRecipeCategory(category);
     }
     public List<Recipe>filterByType(String type){
         return recipeRepository.findRecipesByType(type);
