@@ -7,6 +7,7 @@ import com.example.backendprueba.repository.IngredientCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -14,7 +15,8 @@ public class IngredientCategoryService {
     @Autowired
     private IngredientCategoryRepository ingredientCategoryRepository;
 
-    public IngredientCategory register(IngredientCategory ingredientCategory){
+    @Transactional
+    public IngredientCategory save(IngredientCategory ingredientCategory){
         return ingredientCategoryRepository.save(ingredientCategory);
     }
 

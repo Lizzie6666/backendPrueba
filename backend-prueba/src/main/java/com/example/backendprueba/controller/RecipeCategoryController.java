@@ -1,6 +1,7 @@
 package com.example.backendprueba.controller;
 
 import com.example.backendprueba.dto.RecipeCategoryDTO;
+import com.example.backendprueba.dto.RecipeDTO;
 import com.example.backendprueba.entities.RecipeCategory;
 import com.example.backendprueba.service.RecipeCategoryService;
 import lombok.RequiredArgsConstructor;
@@ -10,9 +11,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.xml.ws.Service;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,85 +24,56 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class RecipeCategoryController {
-    Logger logger = LoggerFactory.getLogger(RecipeCategoryController.class);
+
 
     @Autowired
     private RecipeCategoryService recipeCategoryService;
 
     @PostMapping("/recipecategory")
     public ResponseEntity<RecipeCategoryDTO> register(@RequestBody RecipeCategoryDTO recipeCategoryDTO){
-        RecipeCategory recipeCategory = convertToEntity(recipeCategoryDTO);
-        RecipeCategoryDTO recipeCategoryDTO1;
-        try {
-            recipeCategory = recipeCategoryService.register(recipeCategory);
-            recipeCategoryDTO1 = convertToDto(recipeCategory);
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not register");
-        }
-        return new ResponseEntity<RecipeCategoryDTO>(recipeCategoryDTO1, HttpStatus.OK);
+        ModelMapper modelMapper=new ModelMapper();
+        RecipeCategory recipeCategory=modelMapper.map(recipeCategoryDTO,RecipeCategory.class);
+        recipeCategory=recipeCategoryService.save(recipeCategory);
+        recipeCategoryDTO=modelMapper.map(recipeCategory,RecipeCategoryDTO.class);
+        return new ResponseEntity<>(recipeCategoryDTO,HttpStatus.OK);
     }
     @GetMapping("/recipecategories")
     public ResponseEntity<List<RecipeCategoryDTO>> list(){
-        List<RecipeCategory> list;
-        List<RecipeCategoryDTO> listDto;
-        try{
-            list = recipeCategoryService.listado();
-            listDto = convertToLisDto(list);
-        }catch (Exception e){
-            throw new  ResponseStatusException(HttpStatus.NOT_FOUND, "No se pudo listar");
-        }
-        return new ResponseEntity<List<RecipeCategoryDTO>>(listDto,HttpStatus.OK);
+        ModelMapper modelMapper=new ModelMapper();
+        List<RecipeCategoryDTO>rec= Arrays.asList(
+                modelMapper.map(recipeCategoryService.list(),
+                        RecipeCategoryDTO[].class)
+        );
+        return new ResponseEntity<>(rec,HttpStatus.OK);
     }
-    @PutMapping("/recipecategory")
+
+    @PutMapping("/recipecategory/update")
     public ResponseEntity<RecipeCategoryDTO> update(@RequestBody RecipeCategoryDTO recipeCategoryDTO) {
-        RecipeCategoryDTO recipeCategoryDTO1;
+
         RecipeCategory recipeCategory;
         try {
-            recipeCategory = convertToEntity(recipeCategoryDTO);
-            logger.debug("Updated recipe");
-            recipeCategory = recipeCategoryService.update(recipeCategory);
-            logger.debug("Updated recipe");
-            recipeCategoryDTO = convertToDto(recipeCategory);
+            ModelMapper modelMapper=new ModelMapper();
+            recipeCategory=modelMapper.map(recipeCategoryDTO,RecipeCategory.class);
+            recipeCategory=recipeCategoryService.update(recipeCategory);
+            recipeCategoryDTO=modelMapper.map(recipeCategory,RecipeCategoryDTO.class);
             return new ResponseEntity<RecipeCategoryDTO>(recipeCategoryDTO, HttpStatus.OK);
         } catch (Exception e) {
-            logger.error("Update error", e);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se pudo actualizar, sorry");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not update");
         }
     }
+
     @DeleteMapping("/recipecategory/{id}")
-    public ResponseEntity<RecipeCategoryDTO> delete(@PathVariable(value = "id") Long id){
+    public ResponseEntity<RecipeCategoryDTO> delete(@PathVariable("id") Long id){
         RecipeCategory recipeCategory;
         RecipeCategoryDTO recipeCategoryDTO;
-        try {
-            recipeCategory = recipeCategoryService.delete(id);
-            logger.debug("Deleted recipe");
-            recipeCategoryDTO= convertToDto(recipeCategory);
-            return new ResponseEntity<RecipeCategoryDTO>(recipeCategoryDTO, HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Deletion error ", e);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No se pudo eliminar, sorry");
+        try{
+            ModelMapper modelMapper=new ModelMapper();
+            recipeCategory=recipeCategoryService.delete(id);
+            recipeCategoryDTO=modelMapper.map(recipeCategory, RecipeCategoryDTO.class);
+            return new ResponseEntity<>(recipeCategoryDTO,HttpStatus.OK);
+        }catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "could not delete");
         }
     }
-
-    private List<RecipeCategoryDTO> convertToLisDto(List<RecipeCategory> list) {
-        return list.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-
-    }
-
-    private RecipeCategory convertToEntity(RecipeCategoryDTO recipeCategoryDTO) {
-        ModelMapper modelMapper = new ModelMapper();
-        RecipeCategory post = modelMapper.map(recipeCategoryDTO, RecipeCategory.class);
-        return post;
-    }
-
-    private RecipeCategoryDTO convertToDto(RecipeCategory recipeCategory) {
-        ModelMapper modelMapper = new ModelMapper();
-        RecipeCategoryDTO recipeCategoryDTO = modelMapper.map(recipeCategory, RecipeCategoryDTO.class);
-        return recipeCategoryDTO;
-    }
-
 
 }

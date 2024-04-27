@@ -5,20 +5,24 @@ import lombok.*;
 import com.example.backendprueba.entities.Recipe;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "recipeCategory")
+@Table
 public class RecipeCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="recipeCategory_id")
     private Long id;
 
     private String name;
-   @OneToMany(mappedBy = "recipeCategory", cascade = CascadeType.ALL)
-   @JsonManagedReference("recipeCategory_items")
-    private List<Recipe> recipes ;
+
+    //OnoToMany unidireccional RecipCat - Recipe
+   @OneToMany(cascade = CascadeType.ALL, fetch= FetchType.LAZY)
+   @JoinColumn(name="recipeCategory_id",referencedColumnName = "recipeCategory_id")
+    private List<Recipe> recipes =new ArrayList<>();
 }

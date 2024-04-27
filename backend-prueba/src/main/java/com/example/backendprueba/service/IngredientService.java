@@ -7,6 +7,7 @@ import com.example.backendprueba.repository.IngredientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -14,7 +15,8 @@ public class IngredientService {
     @Autowired
     private IngredientRepository ingredientRepository;
 
-    public Ingredient register(Ingredient ingredient){
+    @Transactional
+    public Ingredient save(Ingredient ingredient){
         return ingredientRepository.save(ingredient);
     }
 

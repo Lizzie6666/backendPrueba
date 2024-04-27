@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,78 +22,53 @@ public class RecipeController {
     @Autowired
     public RecipeService recipeService;
 
-    Logger logger = LoggerFactory.getLogger(RecipeController.class);
     @GetMapping("/recipes")
     public ResponseEntity<List<RecipeDTO>>recipeList() {
-        List<Recipe> list;
-        List<RecipeDTO> listDto;
-        try{
-            list = recipeService.recipeList();
-            listDto = convertToLisDto(list);
-        }catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't list");
-        }
-        return new ResponseEntity<List<RecipeDTO>>(listDto,HttpStatus.OK);
+        ModelMapper modelMapper=new ModelMapper();
+        List<RecipeDTO>rec= Arrays.asList(
+                modelMapper.map(recipeService.list(),
+                        RecipeDTO[].class)
+        );
+        return new ResponseEntity<>(rec,HttpStatus.OK);
     }
     @PostMapping("/recipe")
     public ResponseEntity<RecipeDTO> register(@RequestBody RecipeDTO recipeDto){
-        Recipe recipe = convertToEntity(recipeDto);
-        RecipeDTO recipeDTO;
-        try {
-            recipe = recipeService.register(recipe);
-            recipeDTO = convertToDto(recipe);
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new  ResponseStatusException(HttpStatus.NOT_FOUND, "Could not register");
-        }
-        return new ResponseEntity<RecipeDTO>(recipeDTO, HttpStatus.OK);
+        ModelMapper modelMapper=new ModelMapper();
+        Recipe recipe=modelMapper.map(recipeDto,Recipe.class);
+        recipe=recipeService.save(recipe);
+        recipeDto=modelMapper.map(recipe,RecipeDTO.class);
+        return new ResponseEntity<>(recipeDto,HttpStatus.OK);
     }
     @PutMapping("/recipe/update")
-    public ResponseEntity<RecipeDTO> actualizarAutor(@RequestBody RecipeDTO recipeDto) {
-        RecipeDTO recipeDTO;
+    public ResponseEntity<RecipeDTO> update(@RequestBody RecipeDTO recipeDto) {
         Recipe recipe;
-        try {
-            recipe = convertToEntity(recipeDto);
-            logger.debug("Updated recipe");
-            recipe = recipeService.update(recipe);
-            logger.debug("Updated recipe");
-            recipeDTO = convertToDto(recipe);
-            return new ResponseEntity<RecipeDTO>(recipeDTO, HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Update error", e);
+        try{
+            ModelMapper modelMapper=new ModelMapper();
+            recipe=modelMapper.map(recipeDto,Recipe.class);
+            recipe=recipeService.update(recipe);
+            recipeDto=modelMapper.map(recipe,RecipeDTO.class);
+            return new ResponseEntity<>(recipeDto,HttpStatus.OK);
+        }catch(Exception e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not update");
         }
+
     }
 
     @DeleteMapping("/recipe/{id}")
-    public ResponseEntity<RecipeDTO> delete(@PathVariable(value = "id") Long id){
+    public ResponseEntity<RecipeDTO> delete(@PathVariable("id") Long id){
         Recipe recipe;
         RecipeDTO recipeDTO;
-        try {
-            recipe = recipeService.delete(id);
-            logger.debug("Deleted recipe");
-            recipeDTO = convertToDto(recipe);
-            return new ResponseEntity<RecipeDTO>(recipeDTO, HttpStatus.OK);
-        } catch (Exception e) {
-            logger.error("Deletion error ", e);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ould not delete");
-        }
+         try {
+             ModelMapper modelMapper=new ModelMapper();
+             recipe=recipeService.delete(id);
+             recipeDTO=modelMapper.map(recipe,RecipeDTO.class);
+             return new ResponseEntity<>(recipeDTO,HttpStatus.OK);
+         }catch (Exception e){
+             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "could not delete");
+         }
+
     }
 
 
-    private RecipeDTO convertToDto(Recipe recipe) {
-        ModelMapper modelMapper = new ModelMapper();
-        RecipeDTO recipeDTO = modelMapper.map(recipe, RecipeDTO.class);
-        return recipeDTO;
-    }
-    private Recipe convertToEntity(RecipeDTO recipeDTO) {
-        ModelMapper modelMapper = new ModelMapper();
-        Recipe recipe = modelMapper.map(recipeDTO, Recipe.class);
-        return recipe;
-    }
-    private List<RecipeDTO> convertToLisDto(List<Recipe> list){
-        return list.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-    }
+
 }

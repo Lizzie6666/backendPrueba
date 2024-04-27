@@ -14,10 +14,10 @@ public class RecipeCategoryService {
     private  RecipeCategoryRepository recipeCategoryRepository;
 
     @Transactional
-    public  RecipeCategory register(RecipeCategory recipeCategory){
+    public  RecipeCategory save(RecipeCategory recipeCategory){
         return recipeCategoryRepository.save(recipeCategory);
     }
-    public List<RecipeCategory> listado(){
+    public List<RecipeCategory> list(){
         return recipeCategoryRepository.findAll();
     }
 
@@ -26,8 +26,8 @@ public class RecipeCategoryService {
         return recipeCategoryRepository.save(recipeCategory);
     }
 
-    public RecipeCategory delete(Long codigo) throws Exception{
-        RecipeCategory recipeCategory = recipeCategoryRepository.findById(codigo).orElseThrow(() -> new Exception("No se encontró entidad"));
+    public RecipeCategory delete(Long id) throws Exception{
+        RecipeCategory recipeCategory = recipeCategoryRepository.findById(id).orElseThrow(() -> new Exception("No se encontró entidad"));
         recipeCategoryRepository.delete(recipeCategory);
         return recipeCategory;
     }

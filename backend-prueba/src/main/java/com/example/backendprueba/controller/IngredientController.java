@@ -1,7 +1,9 @@
 package com.example.backendprueba.controller;
 
 import com.example.backendprueba.dto.IngredientDTO;
+import com.example.backendprueba.dto.RecipeDTO;
 import com.example.backendprueba.entities.Ingredient;
+import com.example.backendprueba.entities.Recipe;
 import com.example.backendprueba.service.IngredientService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -12,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.xml.ws.Service;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,79 +24,53 @@ import java.util.stream.Collectors;
 public class IngredientController {
     @Autowired
     private IngredientService ingredientService;
-    Logger logger = LoggerFactory.getLogger(IngredientController.class);
+
     @GetMapping("/ingredients")
     public ResponseEntity<List<IngredientDTO>> list(){
-        List<Ingredient> list;
-        List<IngredientDTO> listDto;
-        try {
-            list=ingredientService.list();
-            listDto=convertToListDTO(list);
-        }catch(Exception e){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Can´t list");
-        }
-        return new ResponseEntity<List<IngredientDTO>>(listDto,HttpStatus.OK);
+        ModelMapper modelMapper=new ModelMapper();
+        List<IngredientDTO> ingredient=Arrays.asList(
+                modelMapper.map(ingredientService.list(),
+                        IngredientDTO[].class)
+        );
+        return new ResponseEntity<>(ingredient,HttpStatus.OK);
     }
     @PostMapping("/ingredient")
     public ResponseEntity<IngredientDTO> save(@RequestBody IngredientDTO ingredientDto){
-        Ingredient ingredient=convertToEntity(ingredientDto);
-        IngredientDTO ingredientDTO;
-        try{
-            ingredient = ingredientService.register(ingredient);
-            ingredientDTO=convertToDTO(ingredient);
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Could not register");
-        }
-        return new ResponseEntity<IngredientDTO>(ingredientDTO,HttpStatus.OK);
+        ModelMapper modelMapper=new ModelMapper();
+        Ingredient ingredient=modelMapper.map(ingredientDto,Ingredient.class);
+        ingredient=ingredientService.save(ingredient);
+        ingredientDto=modelMapper.map(ingredient,IngredientDTO.class);
+        return new ResponseEntity<>(ingredientDto,HttpStatus.OK);
     }
 
     @PutMapping("/ingredient/update")
     public ResponseEntity<IngredientDTO> update(@RequestBody IngredientDTO ingredientDto) {
-        IngredientDTO ingredientDTO;
         Ingredient ingredient;
         try{
-            ingredient=convertToEntity(ingredientDto);
-            logger.debug("Update recipe");
-            ingredient = ingredientService.update(ingredient);
-            logger.debug("Update recipe");
-            ingredientDTO=convertToDTO(ingredient);
-        } catch (Exception e) {
-            logger.error("Update error",e);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Could not update");
+            ModelMapper modelMapper=new ModelMapper();
+            ingredient=modelMapper.map(ingredientDto,Ingredient.class);
+            ingredient=ingredientService.update(ingredient);
+            ingredientDto=modelMapper.map(ingredient, IngredientDTO.class);
+            return new ResponseEntity<>(ingredientDto,HttpStatus.OK);
+        }catch(Exception e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not update");
         }
-        return null;
     }
 
     @DeleteMapping("/ingredient/{id}")
-    public ResponseEntity<IngredientDTO>delete(@PathVariable(value = "id") Long id){
+    public ResponseEntity<IngredientDTO>delete(@PathVariable("id") Long id){
         Ingredient ingredient;
         IngredientDTO ingredientDTO;
-        try{
+        try {
+            ModelMapper modelMapper=new ModelMapper();
             ingredient=ingredientService.delete(id);
-            logger.debug("deleted recipe");
-            ingredientDTO = convertToDTO(ingredient);
-        } catch (Exception e) {
-            logger.error("Deleted error",e);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Could not deleted");
+            ingredientDTO=modelMapper.map(ingredient,IngredientDTO.class);
+            return new ResponseEntity<>(ingredientDTO,HttpStatus.OK);
+        }catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "could not delete");
         }
-        return null;
+
     }
 
-    private Ingredient convertToEntity(IngredientDTO ingredientDTO){
-        ModelMapper modelMapper = new ModelMapper();
-        Ingredient i= modelMapper.map(ingredientDTO, Ingredient.class);
-        return i;
-    }
-    private IngredientDTO convertToDTO(Ingredient ingredient){
-        ModelMapper modelMapper =new ModelMapper();
-        IngredientDTO ingredientDTO=modelMapper.map(ingredient,IngredientDTO.class);
-        return ingredientDTO;
-    }
 
-    private List<IngredientDTO> convertToListDTO(List<Ingredient> list){
-        return list.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
 }

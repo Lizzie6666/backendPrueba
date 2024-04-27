@@ -14,12 +14,8 @@ public class RecipeService {
     RecipeRepository recipeRepository;
 
     @Transactional
-    public Recipe register(Recipe recipe){ return recipeRepository.save(recipe);}
+    public Recipe save(Recipe recipe){ return recipeRepository.save(recipe);}
 
-   //public List<Recipe> search(String prefix) throws Exception{
-   //    return recipeRepository.findRecipeByTitleStartingWith(prefix).
-   //            orElseThrow(() ->new Exception("Recipe not found"));
-   //}
     public List<Recipe> search(String prefix) throws Exception {
         List<Recipe> recipes = recipeRepository.findRecipeByTitleStartingWith(prefix);
         if (recipes.isEmpty()) {
@@ -28,7 +24,7 @@ public class RecipeService {
         return recipes;
     }
 
-    public List<Recipe> recipeList() { return recipeRepository.findAll();}
+    public List<Recipe> list() { return recipeRepository.findAll();}
 
     public Recipe delete(Long id) throws Exception{
         Recipe recipe=recipeRepository.findById(id).orElseThrow(()->new Exception("Recipe not found"));
@@ -41,12 +37,9 @@ public class RecipeService {
         return recipeRepository.save(recipe);
     }
 
-    public List<Recipe>filterByIngredient(String ingredient){
-        return recipeRepository.findRecipesByIngredients(ingredient);
-    }
-    public List<Recipe>filterByRecipeCategory(String category){
-        return recipeRepository.findRecipesByRecipeCategory(category);
-    }
+   public List<Recipe>filterByIngredient(String ingredient){
+       return recipeRepository.findRecipesByIngredients(ingredient);
+   }
     public List<Recipe>filterByType(String type){
         return recipeRepository.findRecipesByType(type);
     }

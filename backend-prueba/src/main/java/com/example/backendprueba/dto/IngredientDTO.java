@@ -1,14 +1,16 @@
 package com.example.backendprueba.dto;
 
-import lombok.Getter;
-import lombok.Setter;
 
-import javax.persistence.Column;
+import lombok.*;
 
-@Setter
-@Getter
+
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class IngredientDTO {
     private Long id;
     private String name;
-    private Long calorias;
+    private Long calories;
+
 }

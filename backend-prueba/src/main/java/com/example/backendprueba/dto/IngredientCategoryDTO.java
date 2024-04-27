@@ -1,11 +1,15 @@
 package com.example.backendprueba.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.example.backendprueba.entities.Ingredient;
+import lombok.*;
 
-@Setter
-@Getter
+import java.util.List;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class IngredientCategoryDTO {
     private Long id;
-    private String nombre;
+    private String name;
+    private List<Ingredient> ingredients ;
 }
