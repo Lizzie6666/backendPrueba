@@ -1,6 +1,7 @@
 package com.example.backendprueba.service;
 
 
+import com.example.backendprueba.entities.Recipe;
 import com.example.backendprueba.entities.RecipeCategory;
 import com.example.backendprueba.repository.RecipeCategoryRepository;
 
@@ -30,5 +31,12 @@ public class RecipeCategoryService {
         RecipeCategory recipeCategory = recipeCategoryRepository.findById(id).orElseThrow(() -> new Exception("No se encontró entidad"));
         recipeCategoryRepository.delete(recipeCategory);
         return recipeCategory;
+    }
+    public List<RecipeCategory> search(String name) throws Exception {
+        List<RecipeCategory> reCat = recipeCategoryRepository.findAllByNameStartingWith(name);
+        if (reCat.isEmpty()) {
+            throw new Exception("Recipe not found");
+        }
+        return reCat;
     }
 }

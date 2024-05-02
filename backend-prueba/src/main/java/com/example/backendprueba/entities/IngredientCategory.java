@@ -2,12 +2,10 @@ package com.example.backendprueba.entities;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +24,7 @@ public class IngredientCategory {
     //OneToMany Unidireccional IngreCat - Ingredient
     @OneToMany(cascade = CascadeType.ALL, fetch= FetchType.LAZY)
     @JoinColumn(name="ingredientCategory_id",referencedColumnName = "ingredientCategory_id")
+    @JsonBackReference
     private List<Ingredient> ingredients =new ArrayList<>();
 
 }

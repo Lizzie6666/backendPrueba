@@ -1,43 +1,37 @@
 package com.example.backendprueba.controller;
 
 import com.example.backendprueba.dto.RecipeCategoryDTO;
-import com.example.backendprueba.dto.RecipeDTO;
 import com.example.backendprueba.entities.RecipeCategory;
 import com.example.backendprueba.service.RecipeCategoryService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
-import javax.xml.ws.Service;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/recipecategory")
 public class RecipeCategoryController {
 
 
     @Autowired
     private RecipeCategoryService recipeCategoryService;
 
-    @PostMapping("/recipecategory")
-    public ResponseEntity<RecipeCategoryDTO> register(@RequestBody RecipeCategoryDTO recipeCategoryDTO){
+    @PostMapping("/save")
+    public ResponseEntity<RecipeCategoryDTO> save(@RequestBody RecipeCategoryDTO recipeCategoryDTO){
         ModelMapper modelMapper=new ModelMapper();
         RecipeCategory recipeCategory=modelMapper.map(recipeCategoryDTO,RecipeCategory.class);
         recipeCategory=recipeCategoryService.save(recipeCategory);
         recipeCategoryDTO=modelMapper.map(recipeCategory,RecipeCategoryDTO.class);
         return new ResponseEntity<>(recipeCategoryDTO,HttpStatus.OK);
     }
-    @GetMapping("/recipecategories")
+    @GetMapping("/list")
     public ResponseEntity<List<RecipeCategoryDTO>> list(){
         ModelMapper modelMapper=new ModelMapper();
         List<RecipeCategoryDTO>rec= Arrays.asList(
@@ -47,7 +41,7 @@ public class RecipeCategoryController {
         return new ResponseEntity<>(rec,HttpStatus.OK);
     }
 
-    @PutMapping("/recipecategory/update")
+    @PutMapping("/update")
     public ResponseEntity<RecipeCategoryDTO> update(@RequestBody RecipeCategoryDTO recipeCategoryDTO) {
 
         RecipeCategory recipeCategory;
@@ -62,7 +56,7 @@ public class RecipeCategoryController {
         }
     }
 
-    @DeleteMapping("/recipecategory/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<RecipeCategoryDTO> delete(@PathVariable("id") Long id){
         RecipeCategory recipeCategory;
         RecipeCategoryDTO recipeCategoryDTO;
@@ -73,6 +67,19 @@ public class RecipeCategoryController {
             return new ResponseEntity<>(recipeCategoryDTO,HttpStatus.OK);
         }catch (Exception e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "could not delete");
+        }
+    }
+    @GetMapping("/search/{name}")
+    public ResponseEntity<List<RecipeCategoryDTO>>search(@PathVariable("name") String name){
+        try{
+            ModelMapper modelMapper=new ModelMapper();
+            List<RecipeCategoryDTO>rec= Arrays.asList(
+                    modelMapper.map(recipeCategoryService.search(name),
+                            RecipeCategoryDTO[].class)
+            );
+            return new ResponseEntity<>(rec,HttpStatus.OK);
+        }catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Recipe category not found");
         }
     }
 

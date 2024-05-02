@@ -1,31 +1,24 @@
 package com.example.backendprueba.controller;
 import com.example.backendprueba.dto.IngredientCategoryDTO;
-import com.example.backendprueba.dto.RecipeCategoryDTO;
-import com.example.backendprueba.dto.RecipeDTO;
 import com.example.backendprueba.entities.IngredientCategory;
-import com.example.backendprueba.entities.Recipe;
-import com.example.backendprueba.entities.RecipeCategory;
 import com.example.backendprueba.service.IngredientCategoryService;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/ingredientsCategory")
 public class IngredientCategoryController {
     @Autowired
     private IngredientCategoryService ingredientCategoryService;
 
-    @GetMapping("/ingredientsCategory")
+    @GetMapping("/list")
     public ResponseEntity<List<IngredientCategoryDTO>> list(){
        ModelMapper modelMapper=new ModelMapper();
        List<IngredientCategoryDTO>ing= Arrays.asList(
@@ -34,8 +27,8 @@ public class IngredientCategoryController {
        );
        return new ResponseEntity<>(ing,HttpStatus.OK);
     }
-    @PostMapping("/ingredientCategory")
-    public ResponseEntity<IngredientCategoryDTO>register(@RequestBody IngredientCategoryDTO ingredientCategoryDTO)
+    @PostMapping("/save")
+    public ResponseEntity<IngredientCategoryDTO>save(@RequestBody IngredientCategoryDTO ingredientCategoryDTO)
     {
         ModelMapper modelMapper=new ModelMapper();
         IngredientCategory ingredientCategory=modelMapper.map(ingredientCategoryDTO,IngredientCategory.class);
@@ -45,7 +38,7 @@ public class IngredientCategoryController {
     }
 
 
-    @PutMapping("/ingredientCategory")
+    @PutMapping("/update")
     public ResponseEntity<IngredientCategoryDTO> update(@RequestBody IngredientCategoryDTO ingredientCategoryDto){
 
         IngredientCategory ingredientCategory;
@@ -59,7 +52,7 @@ public class IngredientCategoryController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Could not update");
         }
     }
-    @DeleteMapping("/ingredientCategory/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<IngredientCategoryDTO>delete(@PathVariable("id") Long id){
         IngredientCategory ingredientCategory;
         IngredientCategoryDTO ingredientCategoryDTO;

@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 public class RecipeService {
     @Autowired
-    RecipeRepository recipeRepository;
+    private RecipeRepository recipeRepository;
 
     @Transactional
     public Recipe save(Recipe recipe){ return recipeRepository.save(recipe);}
@@ -38,9 +38,10 @@ public class RecipeService {
     }
 
    public List<Recipe>filterByIngredient(String ingredient){
-       return recipeRepository.findRecipesByIngredients(ingredient);
+       return recipeRepository.findRecipeByIngredientsIsStartingWith(ingredient);
    }
     public List<Recipe>filterByType(String type){
         return recipeRepository.findRecipesByType(type);
     }
+
 }

@@ -5,6 +5,7 @@ import com.example.backendprueba.entities.Ingredient;
 import lombok.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -18,7 +19,5 @@ public class RecipeDTO {
     private String description;
     private String type; //ex. vegetarian, vegan, etc.
     private Boolean favorite;
-
-
-    private List<Ingredient> ingredients;
+    private Set<Ingredient> ingredients;
 }

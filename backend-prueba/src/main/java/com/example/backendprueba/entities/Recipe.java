@@ -1,16 +1,13 @@
 package com.example.backendprueba.entities;
 
-
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -20,7 +17,6 @@ import java.util.List;
 public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="recipe_id")
     Long id;
     private String title;
     private String image;
@@ -29,10 +25,8 @@ public class Recipe {
     private String description;
     private String type; //ex. vegetarian, vegan, etc.
     private Boolean favorite;
-
-
-    @OneToMany(cascade = CascadeType.ALL, fetch= FetchType.LAZY)
-    @JoinColumn(name="recipe_id",referencedColumnName = "recipe_id")
-    private List<Ingredient> ingredients=new ArrayList<>();
+    @ManyToMany (mappedBy = "ingredientsRecipe",cascade = CascadeType.ALL, fetch= FetchType.LAZY)
+    @JsonBackReference
+    private Set<Ingredient> ingredients=new HashSet<>();
 
 }

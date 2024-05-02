@@ -4,8 +4,7 @@ import com.example.backendprueba.dto.RecipeDTO;
 import com.example.backendprueba.entities.Recipe;
 import com.example.backendprueba.service.RecipeService;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,15 +13,14 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/recipe")
 public class RecipeController {
     @Autowired
     public RecipeService recipeService;
-
-    @GetMapping("/recipes")
+    @GetMapping("/list")
     public ResponseEntity<List<RecipeDTO>>recipeList() {
         ModelMapper modelMapper=new ModelMapper();
         List<RecipeDTO>rec= Arrays.asList(
@@ -31,15 +29,15 @@ public class RecipeController {
         );
         return new ResponseEntity<>(rec,HttpStatus.OK);
     }
-    @PostMapping("/recipe")
-    public ResponseEntity<RecipeDTO> register(@RequestBody RecipeDTO recipeDto){
+    @PostMapping("/save")
+    public ResponseEntity<RecipeDTO> save(@RequestBody RecipeDTO recipeDto){
         ModelMapper modelMapper=new ModelMapper();
         Recipe recipe=modelMapper.map(recipeDto,Recipe.class);
         recipe=recipeService.save(recipe);
         recipeDto=modelMapper.map(recipe,RecipeDTO.class);
         return new ResponseEntity<>(recipeDto,HttpStatus.OK);
     }
-    @PutMapping("/recipe/update")
+    @PutMapping("/update")
     public ResponseEntity<RecipeDTO> update(@RequestBody RecipeDTO recipeDto) {
         Recipe recipe;
         try{
@@ -53,8 +51,7 @@ public class RecipeController {
         }
 
     }
-
-    @DeleteMapping("/recipe/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<RecipeDTO> delete(@PathVariable("id") Long id){
         Recipe recipe;
         RecipeDTO recipeDTO;
@@ -66,9 +63,37 @@ public class RecipeController {
          }catch (Exception e){
              throw new ResponseStatusException(HttpStatus.NOT_FOUND, "could not delete");
          }
-
     }
-
-
-
+    @GetMapping("/filterByIngredient/{ingredient}")
+    public ResponseEntity<List<RecipeDTO>>filterByIngredient(@PathVariable("ingredient")String ingredient){
+        ModelMapper modelMapper=new ModelMapper();
+        List<RecipeDTO>rec= Arrays.asList(
+                modelMapper.map(recipeService.filterByIngredient(ingredient),
+                        RecipeDTO[].class)
+        );
+        return new ResponseEntity<>(rec,HttpStatus.OK);
+    }
+    @GetMapping("/filterByType/{type}")
+    public ResponseEntity<List<RecipeDTO>>filterByType(@PathVariable("type")String type){
+        ModelMapper modelMapper=new ModelMapper();
+        List<RecipeDTO>rec= Arrays.asList(
+                modelMapper.map(recipeService.filterByType(type),
+                        RecipeDTO[].class)
+        );
+        return new ResponseEntity<>(rec,HttpStatus.OK);
+    }
+    @GetMapping("/search/{prefix}")
+    public ResponseEntity<List<RecipeDTO>>search(@PathVariable("prefix")String prefix){
+        try{
+            ModelMapper modelMapper=new ModelMapper();
+            List<RecipeDTO>rec= Arrays.asList(
+                    modelMapper.map(recipeService.search(prefix),
+                            RecipeDTO[].class)
+            );
+            return new ResponseEntity<>(rec,HttpStatus.OK);
+        }catch (Exception e)
+        {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Recipe not found");
+        }
+    }
 }
